@@ -1,4 +1,3 @@
-import json 
 import csv
 from tkinter import N 
 import xml.etree.ElementTree as ET
@@ -10,14 +9,18 @@ def changeFormat(fileName, formatType, fortemp = ""):
     print("File Reference: \"" + fileName + "\"")
     if (formatType == '-c'):
         txt_to_csv(fileName, fortemp)
-    if (formatType == '-j'): 
+
+    elif (formatType == '-j'): 
         txt_to_json(fileName)
-        
-    if (formatType == '-x'):
-        txt_to_xml(fileName)
-        
         os.remove("temp.csv")
         print("File \"temp.csv\" is now deleted.")
+        
+    elif (formatType == '-x'):
+        txt_to_xml(fileName)
+        os.remove("temp.csv")
+        print("File \"temp.csv\" is now deleted.")
+    else:
+        raise Exception("Your selection was not \"-c\", \"-j\", or \"-x\" for .xml.\nProgram Terminated!")
 
 def txt_to_csv(fileName, fortemp):
     print("...Converting .txt to .csv...")
@@ -40,32 +43,52 @@ def txt_to_csv(fileName, fortemp):
 
 def txt_to_json(fileName):
     print("...Converting .txt to .json...")
-    
-    array = {}
-    
-    with open(fileName) as file:
-        for line in file: 
-            description1 = list(line.strip().split(None, 39))
-            break
-        l = 1
-        for line in file: 
-            description = list(line.strip().split(None, 38))
-            block ='Player'+str(l)
 
-            i = 0
-            information = {}
-            while i<len(description):
-                information[description1[i]]= description[i]
-                i = i + 1
+    txt_to_csv(fileName, "temp")
 
-            array[block] = information
-            l = l + 1
-    
     split = fileName.split(".")
     fileNameWOfileType = split[0]
-    newFile = open(fileNameWOfileType + ".json", "w")
-    json.dump(array, newFile, indent=4)
-    newFile.close()
+    
+    print("...Converting .csv to .json...")
+
+    csvFile = "temp.csv"
+    csvFileOpen = open(csvFile, 'r')
+    jsonFile = fileNameWOfileType + ".json" # Make sure to change back to "fileNameWOfileType"
+    csvData = csv.reader(csvFileOpen)
+    jsonData = open(jsonFile, 'w')
+    
+    jsonData.write("{" + "\n")
+
+    rowCount = numRows(csvFile)-1 # minus 1 since we will not be including header as a row
+
+    rowNum = 0
+    top = []
+
+    for row in csvData:
+        if rowNum == 0:
+            for i in range(len(row)):
+                row[i] = row[i].replace(" ", "_")
+                top.append(row[i])
+
+        else:
+            if len(row) > 0:
+                jsonData.write("\t\"Player" + str(rowNum) + "\": {\n")
+                for i in range(len(row)):
+                    if i < len(row)-1:
+                        jsonData.write("\t\t\"" + top[i] + "\": " + "\"" + row[i] + "\",\n")
+                    else:
+                        jsonData.write("\t\t\"" + top[i] + "\": " + "\"" + row[i] + "\"\n")
+                
+                if rowNum < rowCount:
+                    jsonData.write("\t},\n")
+                else:
+                    jsonData.write("\t}\n")
+            else:
+                continue
+        rowNum += 1
+
+    jsonData.write("}" + "\n")
+
     print("Converted to .json")
 
 def txt_to_xml(fileName):
@@ -82,8 +105,8 @@ def txt_to_xml(fileName):
 
     csvData = csv.reader(csvFileOpen)
     xmlData = open(xmlFile, 'w')
-    xmlData.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n")
-    # there must be only one top-level tag
+
+    xmlData.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n") # there must be only one top-level tag
     xmlData.write('<NFL_DB>' + "\n")
     
     rowNum = 0
@@ -112,6 +135,24 @@ def txt_to_xml(fileName):
     
     print("Converted to .xml")
 
+def numRows(fileName):
+    rowCount = 0
+    validity = re.search(".*\.csv$", fileName)
+    print("Validity:", validity)
+    if validity == None:
+        raise Exception("Invalid file type. Must be .csv type.")
+    else:
+        csvFileOpen = open(fileName, 'r')
+        csvData = csv.reader(csvFileOpen)
+
+        for row in csvData:
+            if len(row) <= 0:
+                continue
+            else:
+                rowCount += 1
+
+    return rowCount
+    
 
 ############################################
 # Main Function
@@ -132,9 +173,11 @@ while(True):
 choice = input("File type? \"-c\" for .csv, \"-j\" for .json, \"-x\" for .xml: ")
 check = re.search("(^-c$)|(^-x$)|(^-j$)", choice) # using RegEx to validate choice of input
 
-if check == None:
-    print("Invalid choice.")
-else:
-    changeFormat(fileName, choice)
+# If user inputs invalid choice, continuously make user choose a correct one.
+while check == None:
+    choice = input("Invalid choice. Choose \"-c\" for .csv, \"-j\" for .json, or \"-x\" for .xml: ") 
+    check = re.search("(^-c$)|(^-x$)|(^-j$)", choice) # using RegEx to validate choice of input
+
+changeFormat(fileName, choice)
 
 print("Program Terminated!")
