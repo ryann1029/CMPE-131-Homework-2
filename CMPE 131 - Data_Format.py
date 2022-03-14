@@ -70,12 +70,15 @@ def txt_to_json(fileName):
 
 def txt_to_xml(fileName):
     txt_to_csv(fileName, "temp")
+
+    split = fileName.split(".")
+    fileNameWOfileType = split[0]
     
     print("...Converting .csv to .xml...")
 
     csvFile = "temp.csv"
     csvFileOpen = open(csvFile, 'r')
-    xmlFile = fileName + ".xml"
+    xmlFile = fileNameWOfileType + ".xml"
 
     csvData = csv.reader(csvFileOpen)
     xmlData = open(xmlFile, 'w')
@@ -85,7 +88,6 @@ def txt_to_xml(fileName):
     
     rowNum = 0
     top = []
-    temp = []
     
     for row in csvData:
         if rowNum == 0:
