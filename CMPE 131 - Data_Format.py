@@ -4,6 +4,7 @@
 # Kate Dinh
 # CMPE 131-04
 # Homework 2 - Data Formats
+# March 13, 2022
 
 import csv
 from tkinter import N 
