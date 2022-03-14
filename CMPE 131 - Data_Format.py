@@ -52,12 +52,13 @@ def txt_to_csv(fileName, fortemp):
 def txt_to_json(fileName):
     print("...Converting .txt to .json...")
 
+    print("Creating \"temp.csv\"")
     txt_to_csv(fileName, "temp")
 
     split = fileName.split(".")
     fileNameWOfileType = split[0]
     
-    print("...Converting .csv to .json...")
+    print("...Converting \"temp.csv\" to .json...")
 
     csvFile = "temp.csv"
     csvFileOpen = open(csvFile, 'r')
@@ -100,12 +101,14 @@ def txt_to_json(fileName):
     print("Converted to .json")
 
 def txt_to_xml(fileName):
+
+    print("Creating \"temp.csv\"")
     txt_to_csv(fileName, "temp")
 
     split = fileName.split(".")
     fileNameWOfileType = split[0]
-    
-    print("...Converting .csv to .xml...")
+
+    print("...Converting \"temp.csv\" to .xml...")
 
     csvFile = "temp.csv"
     csvFileOpen = open(csvFile, 'r')
@@ -165,7 +168,7 @@ def numRows(fileName):
 ############################################
 # Main Function
 
-fileNameChoice = input("Would you like to input a file? Y/N\n")
+fileNameChoice = input("Would you like to input a file? Y/N: ")
 
 while(True):
     if (fileNameChoice == 'Y' or fileNameChoice == 'y'):
@@ -176,7 +179,7 @@ while(True):
         fileName = "NFL Offensive Player stats, 1999-2013.txt"
         break
     else:
-        fileNameChoice = input("Invalid choice. Please pick Y/N.\n")
+        fileNameChoice = input("Invalid choice. Please pick Y/N: ")
 
 choice = input("File type? \"-c\" for .csv, \"-j\" for .json, \"-x\" for .xml: ")
 check = re.search("(^-c$)|(^-x$)|(^-j$)", choice) # using RegEx to validate choice of input
