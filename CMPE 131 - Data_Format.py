@@ -129,10 +129,10 @@ def txt_to_xml(fileName):
             if len(row) == 0:
                 continue
             else:
-                xmlData.write("<player>\n")
+                xmlData.write("\t<player>\n")
                 for i in range(len(row)):
-                    xmlData.write("\t<" + top[i] + ">" +  row[i] + "</" + top[i] + ">\n")
-                xmlData.write("</player>\n")
+                    xmlData.write("\t\t<" + top[i] + ">" +  row[i] + "</" + top[i] + ">\n")
+                xmlData.write("\t</player>\n")
                 
         rowNum += 1
 
