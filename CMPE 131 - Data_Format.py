@@ -92,7 +92,6 @@ def txt_to_xml(fileName):
             for i in range(len(row)):
                 row[i] = row[i].replace(" ", "_")
                 top.append(row[i])
-            print(top)
         else:
             if len(row) == 0:
                 continue
