@@ -1,3 +1,10 @@
+# Ryan Nguyen
+# Rafael Meza
+# Jose Hernandez
+# Kate Dinh
+# CMPE 131-04
+# Homework 2 - Data Formats
+
 import csv
 from tkinter import N 
 import xml.etree.ElementTree as ET
@@ -19,6 +26,7 @@ def changeFormat(fileName, formatType, fortemp = ""):
         txt_to_xml(fileName)
         os.remove("temp.csv")
         print("File \"temp.csv\" is now deleted.")
+        
     else:
         raise Exception("Your selection was not \"-c\", \"-j\", or \"-x\" for .xml.\nProgram Terminated!")
 
@@ -32,6 +40,7 @@ def txt_to_csv(fileName, fortemp):
         else:
             split = fileName.split(".")
             fileNameWOfileType = split[0]
+
         newFile = open(fileNameWOfileType + ".csv", 'w')
         csvWriter = csv.writer(newFile)
         
