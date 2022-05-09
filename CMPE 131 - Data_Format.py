@@ -1,5 +1,5 @@
 # Group SUS
-# Group Members: Ryan Nguyen, Rafael Meza, Jose Hernandez, Kate Dinh
+# Group Members: Ryan Nguyen, Rafael Meza, Jose Hernandez
 # CMPE 131-04
 # Homework 2 - Data Format
 # March 13, 2022
